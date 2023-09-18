@@ -29,6 +29,8 @@ URL: https://github.com/RKSanjit/piot-python-components/tree/labmodule02
 
 ### UML Design Diagram(s)
 
+![image](https://github.com/RKSanjit/piot-python-components/assets/144634185/0d160298-b13d-46ed-b5f6-dc36e14ce199)
+
 
 ### Unit Tests Executed
 
