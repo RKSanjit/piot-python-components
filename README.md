@@ -1,43 +1,56 @@
 # Constrained Device Application (Connected Devices)
 
-## Lab Module 02
+## Lab Module 03
+
 
 ### Description
 
-This implementation enables a constrained device application, ConstrainedDeviceApp, to continuously monitor system performance metrics, including CPU and memory utilization. It achieves this through scheduled polling using utility tasks, SystemCpuUtilTask and SystemMemUtilTask, which inherit from a common base task, BaseSystemUtilTask. Configuration settings are accessed via the ConfigUtil singleton. SystemPerformanceManager serves as the central orchestrator, scheduling metric retrieval and logging via the scheduler. ConstrainedDeviceApp manages the system's lifecycle, ensuring smooth operation. In essence, it establishes a structured framework for efficient system performance monitoring.
+What does your implementation do? 
 
-#### What does your implementation do? 
+The implementation simulates and manages both sensors and actuators within a modular framework. 
+At its core, the system can simulate sensing functionalities, capturing diverse data points from virtual sensors and determining
+if the data demands a reactive measure, such as triggering an actuator. 
+In addition to the sensor simulations, the framework also possesses the capability to simulate actuator tasks. 
+Based on the data from the sensors, these actuators can perform specific actions, making the system dynamic and responsive. 
+The overarching design follows three principles: measuring data from simulated sensors, modelling the components for modular integration, 
+and managing the flow of data and actions within the system.
 
-- The implementation enables a constrained device application (ConstrainedDeviceApp) to monitor system performance metrics like CPU and memory utilization
-- It uses a scheduler (BackgroundScheduler) to periodically poll the metrics at a configurable interval
-- The metrics are retrieved by utility tasks (SystemCpuUtilTask, SystemMemUtilTask) that extend a base task
-- The metrics are logged via the handleTelemetry() method of SystemPerformanceManager
-- ConstrainedDeviceApp starts and stops SystemPerformanceManager when the app starts/stops
+How does your implementation work?
 
-#### How does your implementation work?
-
-- SystemPerformanceManager is initialized with a polling interval and config settings
-- When started, it schedules handleTelemetry() to run periodically via the scheduler
-- handleTelemetry() gets CPU and mem utilization using the utility tasks
-- Utility tasks extend BaseSystemUtilTask to implement getTelemetryValue()
-- ConfigUtil provides access to config settings as a singleton
-- ConstrainedDeviceApp creates SystemPerformanceManager and calls its start/stop methods
+- The handleTelemetry() function continuously polls each sensor, collecting its data, and forwards this data to the self.dataMsgListener callback. 
+  This ensures the system is continually updated with the latest readings from all simulated sensors.
+- The SystemPerformanceManager class possibly oversees the operations of both sensor and actuator simulators.
+- The system emphasizes data validation, especially when processing actuator commands.
+- Before executing any command, the system validates the ActuatorData typeID by checking it against a list of known actuator simulators.
+- If a match is found, the corresponding ActuatorData instance is passed to the appropriate actuator task, ensuring only legitimate actuator commands are processed.
 
 ### Code Repository and Branch
 
-URL: https://github.com/RKSanjit/piot-python-components/tree/labmodule02
+
+URL: https://github.com/RKSanjit/piot-python-components/tree/labmodule03
 
 ### UML Design Diagram(s)
 
-![image](https://github.com/RKSanjit/piot-python-components/assets/144634185/0d160298-b13d-46ed-b5f6-dc36e14ce199)
+![mod3](https://github.com/RKSanjit/piot-python-components/assets/144634185/d9dea692-5eb9-41ef-88c7-6fa280c996dd)
 
 
 ### Unit Tests Executed
 
-- ConfigUtilTest.
-- testGetTelemetryValue()
+- ActuatorDataTest
+- SensorDataTest
+- SystemPerformanceDataTest
+- HumiditySensorSimTaskTest
+- PressureSensorSimTaskTest
+- TemperatureSensorSimTaskTest
+- HumidifierActuatorSimTaskTest
+- HvacActuatorSimTaskTest
+- BaseIotDataTest
 
 ### Integration Tests Executed
 
+- ActuatorAdapterManagerTest
+- SensorAdapterManagerTest
+- DeviceDataManagerNoCommsTest.
 - ConstrainedDeviceAppTest.
-- SystemPerformanceManagerTest
+
+EOF.
