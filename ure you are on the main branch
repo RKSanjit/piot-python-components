@@ -1,0 +1,46 @@
+*   [33maf160d4[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/labmodule02[m[33m, [m[1;32mlabmodule02[m[33m)[m Resolved merge conflicts
+[31m|[m[32m\[m  
+[31m|[m * [33m0249d00[m Update README.md
+[31m|[m * [33m3e9bd68[m Update README.md
+* [32m|[m [33m7ae2d80[m Commit
+[32m|[m[32m/[m  
+[32m|[m * [33m3fa109b[m[33m ([m[1;31morigin/main[m[33m)[m Update README.md
+[32m|[m * [33m4938620[m Update README.md
+[32m|[m [33m|[m * [33m9bba43b[m[33m ([m[1;31morigin/labmodule01[m[33m)[m Update README.md
+[32m|[m [33m|[m[32m/[m  
+[32m|[m[32m/[m[33m|[m   
+* [33m|[m [33md4feecf[m[33m ([m[1;32mlabmodule01[m[33m)[m Initial commit
+[33m|[m[33m/[m  
+* [33mebe1a94[m Update README.md
+* [33m90b1c37[m Comments cleanup.
+* [33m851a975[m Update ConfigUtilTest.py
+* [33md7b6c02[m Update LICENSE
+* [33m2955d26[m Update README.md
+* [33md67cd13[m Update README.md
+* [33m3931698[m Update README.md
+* [33m961186c[m Added test / sim data output from my own solution to Lab Module 05.
+* [33med19ff8[m Fixed DataUtilTest.
+* [33m2171f10[m Core components and testing updates.
+* [33m8dcf7bd[m Fixed messaging in logging output.
+* [33m5271ff7[m Added new sensor emulator tests: See PIOT-CDA-04-001.
+* [33me3d76c2[m Fixed call and changed test name in DeviceDataManagerCallbackTest.py.
+* [33m1a26a45[m Updated SensorEmulatorManagerTest.
+*   [33m414ebc7[m Merge branch 'default' of https://github.com/programming-the-iot/python-components.git into default
+[35m|[m[36m\[m  
+[35m|[m * [33mcf87a62[m Update README.md
+[35m|[m * [33mc26a812[m Update README.md
+* [36m|[m [33ma28d462[m Fixed two issues:
+[36m|[m[36m/[m  
+* [33mb307d3c[m Changed parameter 'actuatorType' to 'typeID'.
+* [33m059916f[m Create requirements.txt
+* [33mc6bdb54[m Removed diskUtil from SystemPerformanceData and DataUtil tests.
+* [33m42c8585[m Update README.md
+* [33m0dbc9c7[m Renamed constructor param from actuatorType to typeID. Corrected.
+* [33m4f55fc3[m Delete FAQ.md
+* [33m9d5b986[m Update README.md
+* [33m734d0fd[m Update README.md
+* [33ma9027ec[m Create FAQ.md
+* [33m806b463[m Update issue templates
+* [33m57bf254[m Update README.md
+* [33m44f6a32[m Update README.md
+* [33m0338dab[m Initial commit.

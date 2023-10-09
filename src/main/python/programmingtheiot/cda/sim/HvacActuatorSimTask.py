@@ -9,16 +9,30 @@
 
 import logging
 import random
+import programmingtheiot.common.ConfigConst as ConfigConst
 
 from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.cda.sim.BaseActuatorSimTask import BaseActuatorSimTask
 
 class HvacActuatorSimTask(BaseActuatorSimTask):
 	"""
-	Shell representation of class for student implementation.
-	
+	This class simulates the behavior of an HVAC (Heating, Ventilation, and Air Conditioning) actuator.
+	It inherits from BaseActuatorSimTask.
 	"""
 
+
 	def __init__(self):
+
+		"""
+		Initializes the HVACActuatorSimTask.
+
+		The constructor sets the name, typeID, and simpleName of the HVAC actuator.
+		"""
+		
+		super(HvacActuatorSimTask, self).__init__(
+			name=ConfigConst.HVAC_ACTUATOR_NAME,
+			typeID=ConfigConst.HVAC_ACTUATOR_TYPE,
+			simpleName="HVAC"
+		)
 		pass
 		
