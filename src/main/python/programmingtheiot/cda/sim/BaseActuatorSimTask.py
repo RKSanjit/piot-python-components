@@ -31,15 +31,15 @@ class BaseActuatorSimTask():
 			simpleName (str): The simple name for logging purposes (optional).
 		"""
 
-			self.latestActuatorResponse = ActuatorData(typeID = typeID, name = name)
-			self.latestActuatorResponse.setAsResponse()
-	
-			self.name = name
-			self.typeID = typeID
-			self.simpleName = simpleName
-			self.lastKnownCommand = ConfigConst.DEFAULT_COMMAND
-			self.lastKnownValue = ConfigConst.DEFAULT_VAL
-			pass
+		self.latestActuatorResponse = ActuatorData(typeID = typeID, name = name)
+		self.latestActuatorResponse.setAsResponse()
+
+		self.name = name
+		self.typeID = typeID
+		self.simpleName = simpleName
+		self.lastKnownCommand = ConfigConst.DEFAULT_COMMAND
+		self.lastKnownValue = ConfigConst.DEFAULT_VAL
+		pass
 		
 	def getLatestActuatorResponse(self) -> ActuatorData:
 		"""

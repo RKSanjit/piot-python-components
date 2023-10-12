@@ -119,23 +119,23 @@ class SensorAdapterManager(object):
 
 		This method is scheduled by the BackgroundScheduler at regular intervals.
 		"""
-			humidityData = self.humidityAdapter.generateTelemetry()
-			pressureData = self.pressureAdapter.generateTelemetry()
-			tempData     = self.tempAdapter.generateTelemetry()
-	
-			humidityData.setLocationID(self.locationID)
-			pressureData.setLocationID(self.locationID)
-			tempData.setLocationID(self.locationID)
-	
-			logging.debug('Generated humidity data: ' + str(humidityData))
-			logging.debug('Generated pressure data: ' + str(pressureData))
-			logging.debug('Generated temp data: ' + str(tempData))
-	
-			if self.dataMsgListener:
-					self.dataMsgListener.handleSensorMessage(humidityData)
-					self.dataMsgListener.handleSensorMessage(pressureData)
-					self.dataMsgListener.handleSensorMessage(tempData)
-			pass
+		humidityData = self.humidityAdapter.generateTelemetry()
+		pressureData = self.pressureAdapter.generateTelemetry()
+		tempData     = self.tempAdapter.generateTelemetry()
+
+		humidityData.setLocationID(self.locationID)
+		pressureData.setLocationID(self.locationID)
+		tempData.setLocationID(self.locationID)
+
+		logging.debug('Generated humidity data: ' + str(humidityData))
+		logging.debug('Generated pressure data: ' + str(pressureData))
+		logging.debug('Generated temp data: ' + str(tempData))
+
+		if self.dataMsgListener:
+				self.dataMsgListener.handleSensorMessage(humidityData)
+				self.dataMsgListener.handleSensorMessage(pressureData)
+				self.dataMsgListener.handleSensorMessage(tempData)
+			
 		
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		"""
