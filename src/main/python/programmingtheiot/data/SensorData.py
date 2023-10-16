@@ -27,7 +27,7 @@ class SensorData(BaseIotData):
 		
 		# Initialize class-scoped variable for sensor value with a default value.
 		self.value = ConfigConst.DEFAULT_VAL
-		pass
+		
 	
 	def getSensorType(self) -> int:
 		"""
@@ -40,7 +40,7 @@ class SensorData(BaseIotData):
 		@return: The sensor value as a float
 		"""
 		return self.value
-		pass
+		
 	
 	def setValue(self, newVal: float):
 		"""
@@ -50,7 +50,7 @@ class SensorData(BaseIotData):
 		"""
 		self.value = newVal
 		self.updateTimeStamp()
-		pass
+		
 		
 	def _handleUpdateData(self, data):
 		"""
@@ -61,7 +61,7 @@ class SensorData(BaseIotData):
 		
 		if data and isinstance(data, SensorData):
 			self.value = data.getValue()
-		pass
+		
 	
 	def __str__(self):
     		return "SensorData [name={}, typeID={}, value={}, timeStamp={}]".format(

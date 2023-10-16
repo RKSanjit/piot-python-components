@@ -73,7 +73,7 @@ class HumidifierEmulatorTaskTest(unittest.TestCase):
 			self.assertEqual(adr.getStatusCode(), 0)
 			logging.info("ActuatorData: " + str(adr))
 			
-			# wait 5 seconds
+			
 		else:
 			logging.warning("ActuatorData is None.")
 			

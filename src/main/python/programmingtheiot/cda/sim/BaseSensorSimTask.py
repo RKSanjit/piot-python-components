@@ -107,8 +107,10 @@ class BaseSensorSimTask():
 		pass
 	
 	def getName(self) -> str:
-		pass
+		
+		return self.name
+		
 	
 	def getTypeID(self) -> int:
-		pass
+		return self.typeID
 	

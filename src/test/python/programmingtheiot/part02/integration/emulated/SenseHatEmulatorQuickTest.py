@@ -14,14 +14,14 @@ from time import sleep
 
 from pisense import SenseHAT
 
+
+
 class SenseHatEmulatorQuickTest(unittest.TestCase):
 	"""
 	This test case class contains very basic unit tests for
 	verifying the SenseHAT emulator is properly installed and
-	currently running. It should not be considered complete,
-	but serve as a starting point for the student implementing
-	additional functionality within their Programming the IoT
-	environment.
+	currently running. It serves as a starting point for implementing
+	additional functionality 
 	
 	NOTE: This test requires the sense_emu_gui to be running
 	and must have access to the underlying libraries that
