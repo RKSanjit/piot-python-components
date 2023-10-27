@@ -43,7 +43,7 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
     	
         # Check if a SenseHAT LED screen instance is available
         if self.sh.screen:
-            msg = self.getSimpleName() + ' ON: ' + str(val) + 'C'
+            msg = self.getSimpleName() + ' ON: ' + str(val) + '%'
             self.sh.screen.scroll_text(msg)
             return 0  # Success
            
