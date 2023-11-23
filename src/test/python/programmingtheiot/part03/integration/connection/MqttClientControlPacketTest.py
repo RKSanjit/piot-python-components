@@ -15,8 +15,21 @@ from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 from programmingtheiot.data.DataUtil import DataUtil
  
 class MqttClientControlPacketTest(unittest.TestCase):
+    
+    """
+    Unit tests for testing control packet functionality in MqttClientConnector.
+    This includes testing connect, disconnect, server ping, and publish/subscribe operations.
+    """
+
     @classmethod
     def setUpClass(self):
+        
+        """
+        Set up class method for initializing logging and MQTT Client Connector.
+        Uses a different client ID than the CDA for testing purposes.
+        """        
+
+        
         logging.basicConfig(format = '%(asctime)s:%(module)s:%(levelname)s:%(message)s', level = logging.DEBUG)
         logging.info("Executing the MqttClientControlPacketTest class...")
         self.cfg = ConfigUtil()
@@ -34,6 +47,11 @@ class MqttClientControlPacketTest(unittest.TestCase):
         pass
  
     def testConnectAndDisconnect(self):
+        
+        """
+        Test the MQTT client's ability to connect and disconnect from the broker.
+        """
+        
         logging.info("Testing connect and disconnect...")
         self.assertTrue(self.mcc.connectClient())
         logging.info("Connected to the MQTT broker.")
@@ -42,6 +60,11 @@ class MqttClientControlPacketTest(unittest.TestCase):
         logging.info("Disconnected from the MQTT broker.")
  
     def testServerPing(self):
+        
+        """
+        Test the MQTT client's ability to ping the server to keep the connection alive.
+        """
+        
  
         logging.info("Testing server ping...")
         self.assertTrue(self.mcc.connectClient())
@@ -55,6 +78,11 @@ class MqttClientControlPacketTest(unittest.TestCase):
  
  
     def testPubSub(self):
+        
+        """
+        Test publish and subscribe functionality of the MQTT client with different QoS levels.
+        """
+        
         
         topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE
         test_message_qos1 = 'Test message QoS 1'
