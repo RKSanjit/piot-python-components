@@ -12,10 +12,20 @@ import logging
 import programmingtheiot.common.ConfigConst as ConfigConst
 
 from programmingtheiot.common.ConfigUtil import ConfigUtil
+from programmingtheiot.common.IDataMessageListener import IDataMessageListener
+from programmingtheiot.common.ISystemPerformanceDataListener import ISystemPerformanceDataListener 
 from programmingtheiot.common.ITelemetryDataListener import ITelemetryDataListener
 
 from programmingtheiot.data.DataUtil import DataUtil
+
+# NOTE: the next import is only needed for GetTelemetryResourceHandler
 from programmingtheiot.data.SensorData import SensorData
+
+# NOTE: the next import is only needed for GetSystemPerformanceResourceHandler
+from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
+
+from coapthon import defines
+from coapthon.resources.resource import Resource
 
 class GetTelemetryResourceHandler(ITelemetryDataListener):
 	"""
@@ -26,10 +36,39 @@ class GetTelemetryResourceHandler(ITelemetryDataListener):
 	CoAP library's observable resource base class.
 	
 	"""
+	
+	def __init__(self, name: str = ConfigConst.SENSOR_MSG, coap_server = None):
+		super(GetTelemetryResourceHandler, self).__init__(name, coap_server, visible = True, observable = True, allow_children = True)
+		
+		self.pollCycles = ConfigUtil().getInteger(section = ConfigConst.CONSTRAINED_DEVICE,	key = ConfigConst.POLL_CYCLES_KEY, defaultVal = ConfigConst.DEFAULT_POLL_CYCLES)
+			
+		self.sensorData = None
+		self.dataUtil = DataUtil()
+		
+		# for testing
+		self.payload = "GetSensorData"
 
-	def __init__(self):
-		pass
+
 		
 	def onSensorDataUpdate(self, data: SensorData = None) -> bool:
 		pass
+
+	def render_GET_advanced(self, request, response):
+		if request:
+			response.code = defines.Codes.CONTENT.number
+			
+			if not self.sensorData:
+				response.code = defines.Codes.EMPTY.number
+				self.sensorData = SensorData()
+				
+			jsonData = DataUtil().sensorDataToJson(self.sensorData )
+			
+			response.payload = jsonData
+			response.content_type = defines.Content_types["application/json"]
+			response.max_age = self.pollCycles
+	
+			# 'changed' will be discussed in a later exercise
+			self.changed = False
+				
+		return self, response
 	

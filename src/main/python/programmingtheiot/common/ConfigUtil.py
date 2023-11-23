@@ -211,4 +211,10 @@ class ConfigUtil(metaclass = Singleton):
 			self._loadConfig()
 		
 		return self.configParser
+
+	def getKeepAlive(self):
+		# You need to replace 'keepAliveKey' with the actual key used in your config
+		return self.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY)
+	
+	
 	

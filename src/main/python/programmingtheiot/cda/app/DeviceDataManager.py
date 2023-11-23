@@ -28,6 +28,8 @@ from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 
+from programmingtheiot.cda.connection.CoapServerAdapter import CoapServerAdapter
+
 class DeviceDataManager(IDataMessageListener):
 	"""
 	This class manages the overall operation of the device, including sensor data, actuation, and system performance.
@@ -86,7 +88,24 @@ class DeviceDataManager(IDataMessageListener):
 			key=ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY
 		)
 
-		pass
+		self.enableMqttClient = \
+			self.configUtil.getBoolean( \
+				section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_MQTT_CLIENT_KEY)
+				
+		self.mqttClient         = None
+		self.coapClient         = None
+		self.coapServer         = None
+		
+		if self.enableMqttClient:
+			self.mqttClient = MqttClientConnector()
+			self.mqttClient.setDataMessageListener(self)
+			
+		self.enableCoapServer = \
+			self.configUtil.getBoolean( \
+								section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_COAP_SERVER_KEY)
+
+		if self.enableCoapServer:
+			self.coapServer = CoapServerAdapter(dataMsgListener = self)
 		
 	def getLatestActuatorDataResponseFromCache(self, name: str = None) -> ActuatorData:
 		"""
@@ -231,7 +250,13 @@ class DeviceDataManager(IDataMessageListener):
 			self.sensorAdapterMgr.startManager()
 		
 		logging.info("Started DeviceDataManager.")
-		pass
+		
+		if self.mqttClient:
+			self.mqttClient.connectClient()
+			self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, callback = None, qos = ConfigConst.DEFAULT_QOS)
+		
+		if self.coapServer:
+			self.coapServer.startServer()
 		
 	def stopManager(self):
 		logging.info("Stopping DeviceDataManager...")
@@ -241,9 +266,15 @@ class DeviceDataManager(IDataMessageListener):
 		
 		if self.sensorAdapterMgr:
 			self.sensorAdapterMgr.stopManager()
+			
+		if self.coapServer:
+			self.coapServer.stopServer()
 		
 		logging.info("Stopped DeviceDataManager.")	
-		pass
+		
+		if self.mqttClient:
+			self.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE)
+			self.mqttClient.disconnectClient()
 		
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""

@@ -12,24 +12,65 @@ import logging
 import programmingtheiot.common.ConfigConst as ConfigConst
 
 from programmingtheiot.common.ConfigUtil import ConfigUtil
+from programmingtheiot.common.IDataMessageListener import IDataMessageListener
+from programmingtheiot.common.ISystemPerformanceDataListener import ISystemPerformanceDataListener 
 from programmingtheiot.common.ITelemetryDataListener import ITelemetryDataListener
 
 from programmingtheiot.data.DataUtil import DataUtil
+
+# NOTE: the next import is only needed for GetTelemetryResourceHandler
+from programmingtheiot.data.SensorData import SensorData
+
+# NOTE: the next import is only needed for GetSystemPerformanceResourceHandler
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 
-class GetSystemPerformanceResourceHandler(ITelemetryDataListener):
-	"""
-	Observable resource that will collect system performance data based on the
-	given name from the data message listener implementation.
-	
-	NOTE: Your implementation will likely need to extend from the selected
-	CoAP library's observable resource base class.
-	
-	"""
+from coapthon import defines
+from coapthon.resources.resource import Resource
 
-	def __init__(self):
-		pass
-		
-	def onSystemPerformanceDataUpdate(self, data: SystemPerformanceData) -> bool:
-		pass
+class GetSystemPerformanceResourceHandler(ITelemetryDataListener):
+    """
+    Observable resource that will collect system performance data based on the
+    given name from the data message listener implementation.
+
+    NOTE: Your implementation will likely need to extend from the selected
+    CoAP library's observable resource base class.
+
+    """
+
+    def __init__(self, name: str = ConfigConst.SYSTEM_PERF_MSG, coap_server=None):
+        super(GetSystemPerformanceResourceHandler, self).__init__(name)#coap_server)#visible=True, observable=True, allow_children=True)
+
+        self.pollCycles = \
+            ConfigUtil().getInteger( \
+                section=ConfigConst.CONSTRAINED_DEVICE, \
+                key=ConfigConst.POLL_CYCLES_KEY, \
+                defaultVal=ConfigConst.DEFAULT_POLL_CYCLES)
+
+        self.sysPerfData = None
+        self.dataUtil = DataUtil()
+
+        # for testing
+        self.payload = "GetSysPerfData"
+
+    def onSystemPerformanceDataUpdate(self, data: SystemPerformanceData) -> bool:
+        pass
+
+    def render_GET_advanced(self, request, response):
+        if request:
+            response.code = defines.Codes.CONTENT.number
+
+            if not self.sysPerfData:
+                response.code = defines.Codes.EMPTY.number
+                self.sysPerfData = SystemPerformanceData()
+
+            jsonData = DataUtil().systemPerformanceDataToJson(self.sysPerfData)
+
+            response.payload = (defines.Content_types["application/json"], jsonData)
+            response.max_age = self.pollCycles
+
+            # 'changed' will be discussed in a later exercise
+            self.changed = False
+
+        return self, response
+
 	
