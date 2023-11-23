@@ -24,15 +24,18 @@ from programmingtheiot.data.DataUtil import DataUtil
 
 class MqttClientConnectorTest(unittest.TestCase):
 	"""
-	This test case class contains very basic unit tests for
-	MqttClientConnector. It should not be considered complete,
-	but serve as a starting point for the student implementing
-	additional functionality within their Programming the IoT
-	environment.
+	This class contains unit tests for MqttClientConnector.
+	It provides basic tests for MQTT connectivity and message handling
+	within the Programming the IoT environment.
 	"""
 	
 	@classmethod
 	def setUpClass(self):
+		
+		"""
+		Set up class method to initialize logging and configuration before tests.
+		"""
+		
 		logging.basicConfig(format = '%(asctime)s:%(module)s:%(levelname)s:%(message)s', level = logging.DEBUG)
 		logging.info("Testing MqttClientConnector class...")
 		
@@ -47,6 +50,10 @@ class MqttClientConnectorTest(unittest.TestCase):
 
 	@unittest.skip("Ignore for now.")
 	def testConnectAndDisconnect(self):
+		"""
+		Test the MQTT client's ability to connect and disconnect from the broker.
+		"""
+		
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
 		self.mcc.connectClient()
@@ -56,7 +63,13 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.disconnectClient()
 
 	@unittest.skip("Ignore for now.")
+	
+	
 	def testConnectAndCDAManagementStatusPubSub(self):
+		"""
+		Test publishing and subscribing to the CDA management status message resource.
+		"""
+		
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
@@ -75,7 +88,14 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.disconnectClient()
 
 	@unittest.skip("Ignore for now.")
+	
+	
 	def testNewActuatorCmdPubSub(self):
+		
+		"""
+		Test publishing a new actuator command.
+		"""
+		
 		qos = 1
 	
 		# NOTE: delay can be anything you'd like - the sleep() calls are simply to slow things down a bit for observation
@@ -97,6 +117,11 @@ class MqttClientConnectorTest(unittest.TestCase):
 		
 	@unittest.skip("Ignore for now.")
 	def testActuatorCmdPubSub(self):
+		
+		"""
+		Test publishing actuator command and setting a specific command value.
+		"""
+		
 		qos = 0
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
@@ -119,6 +144,10 @@ class MqttClientConnectorTest(unittest.TestCase):
 
 	@unittest.skip("Ignore for now.")
 	def testSensorMsgPub(self):
+		"""
+		Test publishing sensor data.
+		"""
+		
 		qos = 0
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
@@ -141,6 +170,11 @@ class MqttClientConnectorTest(unittest.TestCase):
 
 	@unittest.skip("Ignore for now.")
 	def testCDAManagementStatusSubscribe(self):
+		
+		"""
+		Test subscribing to the CDA management status command resource.
+		"""
+		
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
@@ -153,6 +187,11 @@ class MqttClientConnectorTest(unittest.TestCase):
 
 	@unittest.skip("Ignore for now.")
 	def testCDAActuatorCmdSubscribe(self):
+		
+		"""
+		Test subscribing to the CDA actuator command resource.
+		"""
+		
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
@@ -166,8 +205,9 @@ class MqttClientConnectorTest(unittest.TestCase):
 	@unittest.skip("Ignore for now.")
 	def testCDAManagementStatusPublish(self):
 		"""
-		Uncomment this test when integration between the GDA and CDA using MQTT.
+		Test publishing a message to the CDA management status message resource.
 		
+		Note: Uncomment this test for integration between GDA and CDA using MQTT.
 		"""
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
