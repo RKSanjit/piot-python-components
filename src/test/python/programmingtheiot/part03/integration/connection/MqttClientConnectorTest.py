@@ -43,7 +43,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 	def tearDown(self):
 		pass
  
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testConnectAndDisconnect(self):
 		"""
 		Test the MQTT client's ability to connect and disconnect from the broker.
@@ -53,7 +53,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		sleep(delay + 5)
 		self.mcc.disconnectClient()
  
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 
 	def testConnectAndCDAManagementStatusPubSub(self):
 		"""
