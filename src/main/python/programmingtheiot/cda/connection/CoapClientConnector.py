@@ -252,9 +252,7 @@ class CoapClientConnector(IRequestResponseClient):
             self.observeRequests[resourcePath] = None
 
             observeActuatorCmdHandler = \
-            
                 HandleActuatorEvent( \
-
                     listener = self.dataMsgListener, resourcePath = resourcePath, requests = self.observeRequests)
 
             try:
