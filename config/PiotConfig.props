@@ -39,9 +39,9 @@ enableCrypt    = False
 [ConstrainedDevice]
 deviceLocationID = constraineddevice001
 enableEmulator   = True
-enableSenseHAT   = True
+enableSenseHAT   = False
 enableMqttClient = True
-enableCoapServer = True
+enableCoapServer = False
 enableCoapClient = True
 enableSystemPerformance = True
 enableSensing    = True

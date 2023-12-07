@@ -78,8 +78,4 @@ if __name__ == '__main__':
 	"""
 	Attribute definition for when invoking as app via command line
 	"""
-	main()	
-	
-	
-	
-	
+	main()
