@@ -62,7 +62,8 @@ class MqttClientConnectorTest(unittest.TestCase):
 		sleep(5)
 		sleep(delay)
 		self.mcc.disconnectClient()
-	@unittest.skip("Ignore for now.")
+	
+	#@unittest.skip("Ignore for now.")
  
 	def testNewActuatorCmdPubSub(self):
 		"""
@@ -74,20 +75,30 @@ class MqttClientConnectorTest(unittest.TestCase):
 		actuatorData = ActuatorData()
 		payload = DataUtil().actuatorDataToJson(actuatorData)
 		self.mcc.setDataMessageListener(DefaultDataMessageListener())
+		
+		logging.info("Sample ActuatorData JSON (validated): " + str(payload))
+		
 		self.mcc.connectClient()
 		sleep(5)
 		self.mcc.publishMessage(resource = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, msg = payload, qos = qos)
 		sleep(delay)
 		self.mcc.disconnectClient()
+		
+		
 	@unittest.skip("Ignore for now.")
 	def testActuatorCmdPubSub(self):
 		"""
 		Test publishing actuator command and setting a specific command value.
 		"""
 		qos = 0
+		
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
+		
 		actuatorData = ActuatorData()
 		actuatorData.setCommand(7)
+		
+		
+		
 		self.mcc.setDataMessageListener(DefaultDataMessageListener())
 		payload = DataUtil().actuatorDataToJson(actuatorData)
 		self.mcc.connectClient()
