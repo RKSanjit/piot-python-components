@@ -14,9 +14,8 @@ from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
 from programmingtheiot.cda.connection.IPubSubClient import IPubSubClient
 from programmingtheiot.data.DataUtil import DataUtil
-import ssl
  
-
+import ssl
  
 class MqttClientConnector(IPubSubClient):
     """
@@ -81,6 +80,7 @@ class MqttClientConnector(IPubSubClient):
         If already connected, it ignores the request.
         """
         # Connection logic
+        self.caCertFile = self.config.getProperty(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.CERT_FILE_KEY)
         if not self.mqttClient:
             # TODO: make clean_session configurable
             self.mqttClient = mqttClient.Client(client_id = self.clientID, clean_session = True)
@@ -90,7 +90,7 @@ class MqttClientConnector(IPubSubClient):
                     self.port = \
                         self.config.getInteger( \
                             ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.SECURE_PORT_KEY, ConfigConst.DEFAULT_MQTT_SECURE_PORT)
-                    self.mqttClient.tls_set(self.pemFileName, tls_version = ssl.PROTOCOL_TLSv1_2)
+                    self.mqttClient.tls_set(self.caCertFile, tls_version = ssl.PROTOCOL_TLSv1_2)
             except:
                 logging.warning("Failed to enable TLS encryption. Using unencrypted connection.")
             self.mqttClient.on_connect = self.onConnect
@@ -126,17 +126,13 @@ class MqttClientConnector(IPubSubClient):
         Callback method triggered when the MQTT client connects to the broker.
         """
         logging.info('MQTT client connected to broker: ' + str(client))
-        
         logging.info('[Callback] Connected to MQTT broker. Result code: ' + str(rc))
-    
-    # NOTE: Be sure to set `self.defaultQos` during instantiation!
+        # NOTE: Be sure to set `self.defaultQos` during instantiation!
         self.mqttClient.subscribe( \
             topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = self.defaultQos)
-    
         self.mqttClient.message_callback_add( \
             sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, \
             callback = self.onActuatorCommandMessage)
-        
     def onDisconnect(self, client, userdata, rc):
         """
         Callback method triggered when the MQTT client disconnects from the broker.
@@ -190,20 +186,13 @@ class MqttClientConnector(IPubSubClient):
         @param msg The message context, including the embedded payload.
         """
         logging.info('[Callback] Actuator command message received. Topic: %s.', msg.topic)
-    
         if self.dataMsgListener:
             try:
                 # assumes all data is encoded using UTF-8 (between GDA and CDA)
                 actuatorData = DataUtil().jsonToActuatorData(msg.payload.decode('utf-8'))
-                
                 self.dataMsgListener.handleActuatorCommandMessage(actuatorData)
             except:
                 logging.exception("Failed to convert incoming actuation command payload to ActuatorData: ")
-
-        
-        
-        
-        pass
     def publishMessage(self, resource: ResourceNameEnum = None, msg: str = None, qos: int = ConfigConst.DEFAULT_QOS):
         """
         Publishes a message to a specified topic with a given QoS.
@@ -261,4 +250,4 @@ class MqttClientConnector(IPubSubClient):
         Sets a data message listener for handling incoming messages.
         """
         if listener:
-            self.dataMsgListener = listener
+            self.dataMsgListener = listener      
