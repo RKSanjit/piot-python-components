@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source /home/sanjitrk/sense-emu-env/bin/activate
+sense_emu_gui
+deactivate

@@ -6,7 +6,7 @@
 #
 # IMPORTANT: Edit this file to meet your local system requirements.
 #
-
+ 
 #
 # MQTT client configuration information
 #
@@ -17,10 +17,10 @@ host           = localhost
 port           = 1883
 securePort     = 8883
 defaultQoS     = 0
-keepAlive      = 60
+keepAlive      = 30
 enableAuth     = False
 enableCrypt    = False
-
+ 
 #
 # CoAP client configuration information
 #
@@ -32,17 +32,17 @@ port           = 5683
 securePort     = 5684
 enableAuth     = False
 enableCrypt    = False
-
+ 
 #
 # CDA specific configuration information
 #
 [ConstrainedDevice]
 deviceLocationID = constraineddevice001
 enableEmulator   = True
-enableSenseHAT   = False
+enableSenseHAT   = True
 enableMqttClient = True
 enableCoapServer = False
-enableCoapClient = True
+enableCoapClient = False
 enableSystemPerformance = True
 enableSensing    = True
 enableLogging    = True
@@ -50,14 +50,7 @@ pollCycleSecs    = 5
 testGdaDataPath  = /tmp/gda-data
 testCdaDataPath  = /tmp/cda-data
 testEmptyApp     = False
-
-ENABLE_SYSTEM_PERF_KEY = 'enableSystemPerformance'
-ENABLE_SENSING_KEY = 'enableSensing'
-
-HANDLE_TEMP_CHANGE_ON_DEVICE_KEY = 'handleTempChangeOnDevice'
-TRIGGER_HVAC_TEMP_FLOOR_KEY = 'triggerHvacTempFloor'
-TRIGGER_HVAC_TEMP_CEILING_KEY = 'triggerHvacTempCeiling'
-
+ 
 # configurable limits for sensor simulation
 humiditySimFloor   =   35.0
 humiditySimCeiling =   45.0
@@ -65,12 +58,12 @@ pressureSimFloor   =  990.0
 pressureSimCeiling = 1010.0
 tempSimFloor       =   15.0
 tempSimCeiling     =   25.0
-
+ 
 # configurable limits for actuator triggers
 handleTempChangeOnDevice = True
 triggerHvacTempFloor     = 18.0
 triggerHvacTempCeiling   = 20.0
-
+ 
 # camera settings
 streamHostAddr      = 127.0.0.1
 streamHostLabel     = localhost
