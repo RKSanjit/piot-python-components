@@ -1,6 +1,6 @@
 # Constrained Device Application (Connected Devices)
 
-<<<<<<< HEAD
+
 ## Lab Module 06
 
 
