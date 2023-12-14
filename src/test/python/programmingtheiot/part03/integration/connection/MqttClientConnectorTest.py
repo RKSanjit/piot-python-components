@@ -45,8 +45,8 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.connectClient()
 		sleep(delay + 5)
 		self.mcc.disconnectClient()
+		
 	@unittest.skip("Ignore for now.")
- 
 	def testConnectAndCDAManagementStatusPubSub(self):
 		"""
 		Test publishing and subscribing to the CDA management status message resource.

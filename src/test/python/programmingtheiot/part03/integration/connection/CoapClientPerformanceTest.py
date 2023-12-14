@@ -23,29 +23,26 @@ class CoapClientPerformanceTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        logging.disable(level=logging.WARNING)
+        logging.disable(level = logging.WARNING)
+        self.semaphore = Semaphore(self.CONCURRENCY_LEVEL)
 
+        
     def setUp(self):
         self.coapClient = CoapClientConnector()
-        self.semaphore = Semaphore(self.CONCURRENCY_LEVEL)  # Semaphore to control concurrency
 
     def tearDown(self):
-        pass
-
-    @unittest.skip("Ignore for now.")
-    def testGetRequestCon(self):
-        print("Testing GET - CON")
-        self._execTestGet(self.MAX_TEST_RUNS, True)
-
-    @unittest.skip("Ignore for now.")
+        self.coapClient.disconnectClient()
+                    
+    #@unittest.skip("Ignore for now.")
+    def testPostRequestCon(self):
+        print("Testing POST - CON")
+        
+        self._execTestPost(self.MAX_TEST_RUNS, True)
+        
+    #@unittest.skip("Ignore for now.")
     def testGetRequestNon(self):
         print("Testing GET - NON")
         self._execTestGet(self.MAX_TEST_RUNS, False)
-
- #   @unittest.skip("Ignore for now.")
-    def testPostRequestCon(self):
-        print("Testing POST - CON")
-        self._execTestPost(self.MAX_TEST_RUNS, True)
 
   #  @unittest.skip("Ignore for now.")
     def testPostRequestNon(self):
@@ -71,16 +68,18 @@ class CoapClientPerformanceTest(unittest.TestCase):
         print("\nGET message - useCON = " + str(useCon) + " [" + str(maxTestRuns) + "]: " + str(elapsedMillis) + " ms")
 
     def _execTestPost(self, maxTestRuns: int, useCon: bool):
-        sensorData = SensorData()
-        payload = DataUtil().sensorDataToJson(sensorData)
-        startTime = time.time_ns()
-        for seqNo in range(0, maxTestRuns):
-            with self.semaphore:
-                self.coapClient.sendPostRequest(resource=ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, enableCON=useCon, payload=payload)
-                sleep(0.5)  # Introduce a slight delay
-        endTime = time.time_ns()
-        elapsedMillis = (endTime - startTime) / self.NS_IN_MILLIS
-        print("\nPOST message - useCON = " + str(useCon) + " [" + str(maxTestRuns) + "]: " + str(elapsedMillis) + " ms")
+            sensorData = SensorData()
+            payload = DataUtil().sensorDataToJson(sensorData)
+            
+            startTime = time.time_ns()
+            
+            for seqNo in range(0, maxTestRuns):
+                self.coapClient.sendPostRequest(resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, enableCON = useCon, payload = payload)
+                
+            endTime = time.time_ns()
+            elapsedMillis = (endTime - startTime) / self.NS_IN_MILLIS
+            
+            print("POST message - useCON = " + str(useCon) + " [" + str(maxTestRuns) + "]: " + str(elapsedMillis) + " ms")
 
     def _execTestPut(self, maxTestRuns: int, useCon: bool):
         sensorData = SensorData()

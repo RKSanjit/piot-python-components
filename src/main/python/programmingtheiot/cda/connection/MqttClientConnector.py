@@ -37,7 +37,7 @@ class MqttClientConnector(IPubSubClient):
                 ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.HOST_KEY, ConfigConst.DEFAULT_HOST)
         self.port = \
             self.config.getInteger( \
-                                ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.PORT_KEY, ConfigConst.DEFAULT_MQTT_PORT)
+                                ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.PORT_KEY, ConfigConst.DEFAULT_MQTT_SECURE_PORT)
         self.keepAlive = \
             self.config.getInteger( \
                                 ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
@@ -81,6 +81,8 @@ class MqttClientConnector(IPubSubClient):
         """
         # Connection logic
         self.caCertFile = self.config.getProperty(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.CERT_FILE_KEY)
+        
+        
         if not self.mqttClient:
             # TODO: make clean_session configurable
             self.mqttClient = mqttClient.Client(client_id = self.clientID, clean_session = True)
@@ -93,16 +95,20 @@ class MqttClientConnector(IPubSubClient):
                     self.mqttClient.tls_set(self.caCertFile, tls_version = ssl.PROTOCOL_TLSv1_2)
             except:
                 logging.warning("Failed to enable TLS encryption. Using unencrypted connection.")
+            
             self.mqttClient.on_connect = self.onConnect
             self.mqttClient.on_disconnect = self.onDisconnect
             self.mqttClient.on_message = self.onMessage
             self.mqttClient.on_publish = self.onPublish
             self.mqttClient.on_subscribe = self.onSubscribe
+            
         if not self.mqttClient.is_connected():
             logging.info('MQTT client connecting to broker at host: ' + self.host)
             self.mqttClient.connect(self.host, self.port, self.keepAlive)
             self.mqttClient.loop_start()
+            
             return True
+        
         else:
             logging.warning('MQTT client is already connected. Ignoring connect request.')
             return False
@@ -130,9 +136,11 @@ class MqttClientConnector(IPubSubClient):
         # NOTE: Be sure to set `self.defaultQos` during instantiation!
         self.mqttClient.subscribe( \
             topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = self.defaultQos)
+       
         self.mqttClient.message_callback_add( \
             sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, \
             callback = self.onActuatorCommandMessage)
+        
     def onDisconnect(self, client, userdata, rc):
         """
         Callback method triggered when the MQTT client disconnects from the broker.
@@ -155,6 +163,8 @@ class MqttClientConnector(IPubSubClient):
         Callback method triggered when an MQTT message is published.
         """
         logging.info('MQTT message published: ' + str(client))
+        pass
+    
     def onSubscribe(self, client, userdata, mid, granted_qos):
         logging.info('MQTT client subscribed: ' + str(client))
     def onPing(self,client, userdata, level, buf):
@@ -193,6 +203,7 @@ class MqttClientConnector(IPubSubClient):
                 self.dataMsgListener.handleActuatorCommandMessage(actuatorData)
             except:
                 logging.exception("Failed to convert incoming actuation command payload to ActuatorData: ")
+    
     def publishMessage(self, resource: ResourceNameEnum = None, msg: str = None, qos: int = ConfigConst.DEFAULT_QOS):
         """
         Publishes a message to a specified topic with a given QoS.
@@ -200,6 +211,7 @@ class MqttClientConnector(IPubSubClient):
         """
 
         # check validity of resource (topic)
+       
         if not resource:
             logging.warning('No topic specified. Cannot publish message.')
             return False
@@ -212,7 +224,7 @@ class MqttClientConnector(IPubSubClient):
             qos = ConfigConst.DEFAULT_QOS
         # publish message, and wait for publish to complete before returning
         msgInfo = self.mqttClient.publish(topic = resource.value, payload = msg, qos = qos)
-        msgInfo.wait_for_publish()
+        #msgInfo.wait_for_publish()
         return True
 
     def subscribeToTopic(self, resource: ResourceNameEnum = None, callback = None, qos: int = ConfigConst.DEFAULT_QOS):
@@ -245,9 +257,13 @@ class MqttClientConnector(IPubSubClient):
         logging.info('Unsubscribing to topic %s', resource.value)
         self.mqttClient.unsubscribe(resource.value)
         return True
+    
     def setDataMessageListener(self, listener: IDataMessageListener = None) -> bool:
         """
         Sets a data message listener for handling incoming messages.
         """
         if listener:
             self.dataMsgListener = listener      
+            
+            
+            
