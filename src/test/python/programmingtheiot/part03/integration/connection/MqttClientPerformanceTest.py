@@ -39,7 +39,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 	def tearDown(self):
 		pass
  
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testConnectAndDisconnect(self):
 		startTime = time.time_ns()
 		self.assertTrue(self.mqttClient.connectClient())
@@ -51,7 +51,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 	def testPublishQoS0(self):
 		self._execTestPublish(self.MAX_TEST_RUNS, 0)
  
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testPublishQoS1(self):
 		self._execTestPublish(self.MAX_TEST_RUNS, 1)
  
@@ -61,18 +61,24 @@ class MqttClientConnectorTest(unittest.TestCase):
  
 	def _execTestPublish(self, maxTestRuns: int, qos: int):
 		self.assertTrue(self.mqttClient.connectClient())
+		
 		sensorData = SensorData()
 		payload = DataUtil().sensorDataToJson(sensorData)
 		payloadLen = len(payload)
+		
 		startTime = time.time_ns()
+		
 		for seqNo in range(0, maxTestRuns):
 			self.mqttClient.publishMessage(resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, msg = payload, qos = qos)
+		
 		endTime = time.time_ns()
 		elapsedMillis = (endTime - startTime) / self.NS_IN_MILLIS
+		
 		self.assertTrue(self.mqttClient.disconnectClient())
+		
 		logging.info( \
 			"\n\tTesting Publish: QoS = %r | msgs = %r | payload size = %r | start = %r | end = %r | elapsed = %r", \
 			qos, maxTestRuns, payloadLen, startTime / 1000, endTime / 1000, elapsedMillis / 1000)
-		#logging.info("Publish message - QoS " + str(qos) + " [" + str(maxTestRuns) + "]: " + str(elapsedMillis) + " ms")
+		logging.info("Publish message - QoS " + str(qos) + " [" + str(maxTestRuns) + "]: " + str(elapsedMillis) + " ms")
 if __name__ == "__main__":
 	unittest.main() 

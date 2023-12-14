@@ -273,6 +273,10 @@ HANDLE_TEMP_CHANGE_ON_DEVICE_KEY = 'handleTempChangeOnDevice'
 TRIGGER_HVAC_TEMP_FLOOR_KEY   = 'triggerHvacTempFloor'
 TRIGGER_HVAC_TEMP_CEILING_KEY = 'triggerHvacTempCeiling'
 
+HANDLE_PRESSURE_CHANGE_ON_DEVICE_KEY = 'handlePressureChangeOnDevice'
+TRIGGER_HVAC_PRESSURE_FLOOR_KEY   = 'triggerHvacPressureFloor'
+TRIGGER_HVAC_PRESSURE_CEILING_KEY = 'triggerHvacPressureCeiling'
+
 RUN_FOREVER_KEY    = 'runForever'
 TEST_EMPTY_APP_KEY = 'testEmptyApp'
 

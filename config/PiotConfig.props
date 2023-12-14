@@ -11,7 +11,7 @@
 # MQTT client configuration information
 #
 [Mqtt.GatewayService]
-credFile       = ./cred/PiotMqttLocalCred.props
+#credFile       = ./cred/PiotMqttLocalCred.props
 certFile       = /home/sanjitrk/mosquitto-2.0.18/certs/server.crt
 host           = localhost
 port           = 1883
@@ -63,6 +63,10 @@ tempSimCeiling     =   25.0
 handleTempChangeOnDevice = True
 triggerHvacTempFloor     = 18.0
 triggerHvacTempCeiling   = 20.0
+
+handlePressureChangeOnDevice = True
+triggerHvacPressureFloor     = 995.0
+triggerHvacPressureCeiling   = 1050.0
  
 # camera settings
 streamHostAddr      = 127.0.0.1

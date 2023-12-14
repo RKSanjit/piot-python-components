@@ -313,6 +313,11 @@ class CoapClientConnector(IRequestResponseClient):
 
                     logging.warning("Failed to cancel observe for resource %s.", resourcePath)
 
+    def disconnectClient(self):
+        if self.coapClient is not None:
+            self.coapClient.stop()
+            self.coapClient = None
+
     def _initClient(self):
 
         """
@@ -435,13 +440,15 @@ class CoapClientConnector(IRequestResponseClient):
 
         """
 
-        if not response:
+        """if not response:
 
             logging.warning('PUT response invalid. Ignoring.')
 
             return
 
         logging.info('PUT response received: %s', response.payload)
+        """
+        pass
  
     def _onPostResponse(self, response):
 
@@ -450,7 +457,7 @@ class CoapClientConnector(IRequestResponseClient):
         Handles the response for a CoAP POST request.
 
         """
-
+        """
         if not response:
 
             logging.warning('POST response invalid. Ignoring.')
@@ -458,6 +465,7 @@ class CoapClientConnector(IRequestResponseClient):
             return
 
         logging.info('POST response received: %s', response.payload)
+        """
 
     def _onDeleteResponse(self, response):
 

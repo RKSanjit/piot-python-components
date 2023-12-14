@@ -29,6 +29,7 @@ from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 from programmingtheiot.common.ConfigUtil import ConfigUtil
+
 class DeviceDataManager(IDataMessageListener):
 	"""
 	Shell representation of class for student implementation.
@@ -50,6 +51,8 @@ class DeviceDataManager(IDataMessageListener):
 		self.sensorAdapterMgr   = None
 		self.actuatorAdapterMgr = None
 		# NOTE: The following aren't used until Part III but should be declared now
+		
+		
 		self.mqttClient         = None
 		self.coapClient         = None
 		self.coapServer         = None
@@ -77,6 +80,20 @@ class DeviceDataManager(IDataMessageListener):
 		self.triggerHvacTempCeiling   = \
 			self.configUtil.getFloat( \
 									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY);
+									
+									
+		self.handlePressureChangeOnDevice = \
+			self.configUtil.getBoolean( \
+									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HANDLE_PRESSURE_CHANGE_ON_DEVICE_KEY)
+		self.triggerHvacTempFloor     = \
+			self.configUtil.getFloat( \
+									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_PRESSURE_FLOOR_KEY);
+		self.triggerHvacTempCeiling   = \
+			self.configUtil.getFloat( \
+									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_PRESSURE_CEILING_KEY);
+									
+									
+									
 		self.enableMqttClient = \
 			self.configUtil.getBoolean( \
 								section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_MQTT_CLIENT_KEY)
@@ -85,11 +102,14 @@ class DeviceDataManager(IDataMessageListener):
 		if self.enableMqttClient:
 			self.mqttClient = MqttClientConnector("test1")
 			self.mqttClient.setDataMessageListener(self)
+			
 		if self.enableCoapServer:
 			self.coapServer = CoapServerAdapter(dataMsgListener = self)
+			
 		self.enableCoapClient = \
 		self.configUtil.getBoolean( \
 			section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_COAP_CLIENT_KEY)
+		
 		if self.enableCoapClient :
 			self.coapClient = CoapClientConnector(dataMsgListener = self)
 	def getLatestActuatorDataResponseFromCache(self, name: str = None) -> ActuatorData:
@@ -261,6 +281,24 @@ class DeviceDataManager(IDataMessageListener):
 			# left to ActuatorAdapterManager and its associated actuator
 			# task implementations, and not this function
 			self.handleActuatorCommandMessage(ad)
+			
+			
+			
+			
+		"""if self.handlePressureChangeOnDevice and data.getTypeID() == ConfigConst.PRESSURE_SENSOR_TYPE:
+			logging.info("Handle pressure change: %s - type ID: %s", str(self.handlePressureChangeOnDevice), str(data.getTypeID()))
+			ad = ActuatorData(typeID = ConfigConst.HVAC_ACTUATOR_TYPE)
+			if data.getValue() > self.triggerHvacPressureCeiling:
+				ad.setCommand(ConfigConst.COMMAND_ON)
+				ad.setValue(self.triggerHvacPressureCeiling)
+			elif data.getValue() < self.triggerHvacPressureFloor:
+				ad.setCommand(ConfigConst.COMMAND_ON)
+				ad.setValue(self.triggerHvacPressureFloor)
+			else:
+				ad.setCommand(ConfigConst.COMMAND_OFF)
+		
+			self.handleActuatorCommandMessage(ad)"""
+			
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
 		"""
 		Call this from handleActuatorCommandResponse(), handlesensorMessage(), and handleSystemPerformanceMessage()

@@ -189,7 +189,7 @@ class CoapClientConnectorTest(unittest.TestCase):
  
             resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, enableCON = False, payload = jsonData, timeout = 5)
  
-    #@unittest.skip("Ignore for now.")
+    @unittest.skip("Ignore for now.")
  
     def testPutSensorMessageCon(self):
  
@@ -207,7 +207,7 @@ class CoapClientConnectorTest(unittest.TestCase):
  
             resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, enableCON = True, payload = jsonData, timeout = 5)
  
-    #@unittest.skip("Ignore for now.")
+    @unittest.skip("Ignore for now.")
  
     def testPutSensorMessageNon(self):
  
@@ -225,7 +225,7 @@ class CoapClientConnectorTest(unittest.TestCase):
  
             resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, enableCON = False, payload = jsonData, timeout = 5)
  
-    @unittest.skip("Ignore for now.")
+    #@unittest.skip("Ignore for now.")
  
     def testActuatorCommandObserve(self):
  
