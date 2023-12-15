@@ -36,7 +36,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		pass
 	def tearDown(self):
 		pass
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testConnectAndDisconnect(self):
 		"""
 		Test the MQTT client's ability to connect and disconnect from the broker.
@@ -46,7 +46,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		sleep(delay + 5)
 		self.mcc.disconnectClient()
 		
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testConnectAndCDAManagementStatusPubSub(self):
 		"""
 		Test publishing and subscribing to the CDA management status message resource.
@@ -85,7 +85,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.disconnectClient()
 		
 		
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testActuatorCmdPubSub(self):
 		"""
 		Test publishing actuator command and setting a specific command value.
@@ -106,7 +106,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.publishMessage(resource = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, msg = payload, qos = qos)
 		sleep(delay + 5)
 		self.mcc.disconnectClient()
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testSensorMsgPub(self):
 		"""
 		Test publishing sensor data.
@@ -122,7 +122,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.publishMessage(resource = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, msg = payload, qos = qos)
 		sleep(delay + 5)
 		self.mcc.disconnectClient()
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testCDAManagementStatusSubscribe(self):
 		"""
 		Test subscribing to the CDA management status command resource.
@@ -133,7 +133,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.subscribeToTopic(resource = ResourceNameEnum.CDA_MGMT_STATUS_CMD_RESOURCE, qos = qos)
 		sleep(delay)
 		self.mcc.disconnectClient()
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testCDAActuatorCmdSubscribe(self):
 		"""
 		Test subscribing to the CDA actuator command resource.
@@ -144,7 +144,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		self.mcc.subscribeToTopic(resource = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, qos = qos)
 		sleep(300)
 		self.mcc.disconnectClient()
-	@unittest.skip("Ignore for now.")
+	#@unittest.skip("Ignore for now.")
 	def testCDAManagementStatusPublish(self):
 		"""
 		Test publishing a message to the CDA management status message resource.
