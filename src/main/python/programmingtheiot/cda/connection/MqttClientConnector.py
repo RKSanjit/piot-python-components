@@ -242,7 +242,12 @@ class MqttClientConnector(IPubSubClient):
             qos = ConfigConst.DEFAULT_QOS
         # subscribe to topic
         logging.info('Subscribing to topic %s', resource.value)
-        self.mqttClient.subscribe(resource.value, qos)
+        
+        try:
+            self.mqttClient.subscribe(resource.value, qos)
+        except:
+            return False
+         # If the publish is valid and the call to the MQTT client is successful, return True.
         return True
 
     def unsubscribeFromTopic(self, resource: ResourceNameEnum = None):
@@ -262,8 +267,12 @@ class MqttClientConnector(IPubSubClient):
         """
         Sets a data message listener for handling incoming messages.
         """
+        logging.info("MQTT set data message listener")
         if listener:
-            self.dataMsgListener = listener      
+            self.dataMsgListener = listener 
+            return True
+
+        return False     
             
             
             
