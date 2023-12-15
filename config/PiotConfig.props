@@ -6,21 +6,21 @@
 #
 # IMPORTANT: Edit this file to meet your local system requirements.
 #
- 
+
 #
 # MQTT client configuration information
 #
 [Mqtt.GatewayService]
-#credFile       = ./cred/PiotMqttLocalCred.props
+credFile       = ./cred/PiotMqttLocalCred.props
 certFile       = /home/sanjitrk/mosquitto-2.0.18/certs/server.crt
 host           = localhost
 port           = 1883
 securePort     = 8883
 defaultQoS     = 0
 keepAlive      = 30
-enableAuth     = False
+enableAuth     = True
 enableCrypt    = True
- 
+
 #
 # CoAP client configuration information
 #
@@ -32,7 +32,7 @@ port           = 5683
 securePort     = 5684
 enableAuth     = False
 enableCrypt    = False
- 
+
 #
 # CDA specific configuration information
 #
@@ -50,7 +50,7 @@ pollCycleSecs    = 5
 testGdaDataPath  = /tmp/gda-data
 testCdaDataPath  = /tmp/cda-data
 testEmptyApp     = False
- 
+
 # configurable limits for sensor simulation
 humiditySimFloor   =   35.0
 humiditySimCeiling =   45.0
@@ -58,16 +58,14 @@ pressureSimFloor   =  990.0
 pressureSimCeiling = 1010.0
 tempSimFloor       =   15.0
 tempSimCeiling     =   25.0
- 
+
 # configurable limits for actuator triggers
 handleTempChangeOnDevice = True
 triggerHvacTempFloor     = 18.0
 triggerHvacTempCeiling   = 20.0
 
-handlePressureChangeOnDevice = True
-triggerHvacPressureFloor     = 995.0
-triggerHvacPressureCeiling   = 1050.0
- 
+
+
 # camera settings
 streamHostAddr      = 127.0.0.1
 streamHostLabel     = localhost
