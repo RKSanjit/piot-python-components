@@ -64,7 +64,9 @@ handleTempChangeOnDevice = True
 triggerHvacTempFloor     = 18.0
 triggerHvacTempCeiling   = 20.0
 
-
+handlePressureChangeOnDevice = True
+triggerHvacPressureFloor     = 900
+triggerHvacPressureCeiling   = 1000
 
 # camera settings
 streamHostAddr      = 127.0.0.1
