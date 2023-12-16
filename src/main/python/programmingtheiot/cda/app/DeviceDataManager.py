@@ -23,7 +23,6 @@ from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
  
 import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.cda.connection.CoapServerAdapter import CoapServerAdapter
-from programmingtheiot.cda.connection.RedisPersistenceAdapter import RedisPersistenceAdapter
  
 from programmingtheiot.data.DataUtil import DataUtil
 from programmingtheiot.data.ActuatorData import ActuatorData
@@ -81,21 +80,18 @@ class DeviceDataManager(IDataMessageListener):
 		self.handlePressureChangeOnDevice = \
 			self.configUtil.getBoolean( \
 									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HANDLE_PRESSURE_CHANGE_ON_DEVICE_KEY)
-		self.triggerEnvPressureFloor     = \
+		self.triggerHvacPressureFloor     = \
 			self.configUtil.getFloat( \
 									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_PRESSURE_FLOOR_KEY);
-		self.triggerEnvPressureCeiling   = \
+		self.triggerHvacPressureCeiling   = \
 			self.configUtil.getFloat( \
 									ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_PRESSURE_CEILING_KEY);
+		
 		self.enableMqttClient = \
 			self.configUtil.getBoolean( \
 								section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_MQTT_CLIENT_KEY)
 		self.mqttClient = None
- 		
- 		self.redisClient = RedisPersistenceAdapter()
- 		
- 		self.enableRedisStorage = True
- 		
+ 
 		if self.enableMqttClient:
 			self.mqttClient = MqttClientConnector("test1")
 			self.mqttClient.setDataMessageListener(self)
@@ -193,16 +189,6 @@ class DeviceDataManager(IDataMessageListener):
 		else:
 			logging.warning("Incoming sensor data is invalid (null). Ignoring.")
 			return False
-		
-		# Store sensor data in Redis if enabled
-		if self.enableRedisStorage:
-			if self.redisClient.storeData(ResourceNameEnum.SENSOR_DATA, data):
-				logging.info("Sensor data stored in Redis successfully.")
-			else:
-				logging.error("Failed to store sensor data in Redis.")
-
-		return True
-	
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		"""
 		This callback method will be invoked by the system performance manager that just
@@ -235,14 +221,6 @@ class DeviceDataManager(IDataMessageListener):
 			self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, callback = None, qos = ConfigConst.DEFAULT_QOS)
 		if self.coapServer:
 			self.coapServer.startServer()
-			
-				# Connect to Redis client if enabled
-		if self.enableRedisStorage:
-			if self.redisClient.connectClient():
-				logging.info("Connected to Redis client successfully.")
-			else:
-				logging.error("Failed to connect to Redis client.")
-
 		logging.info("Started DeviceDataManager.")
 	def stopManager(self):
 		"""
@@ -258,16 +236,7 @@ class DeviceDataManager(IDataMessageListener):
 			self.mqttClient.disconnectClient()
 		if self.coapServer:
 			self.coapServer.stopServer()
-			
-		# Disconnect from Redis client if enabled
-		if self.enableRedisStorage:
-			if self.redisClient.disconnectClient():
-				logging.info("Disconnected from Redis client successfully.")
-			else:
-				logging.error("Failed to disconnect from Redis client.")
-
 		logging.info("Stopped DeviceDataManager.")
-		
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""
 		Call this from handleIncomeMessage() to determine if there's
@@ -295,9 +264,11 @@ class DeviceDataManager(IDataMessageListener):
 				ad.setValue(self.triggerHvacTempFloor)
 			else:
 				ad.setCommand(ConfigConst.COMMAND_OFF)
-		if self.handlePressureChangeOnDevice and data.getTypeID() == ConfigConst.PRESSURE_SENSOR_TYPE:
+				
+			self.handleActuatorCommandMessage(ad)
+			
+		"""if self.handlePressureChangeOnDevice and data.getTypeID() == ConfigConst.PRESSURE_SENSOR_TYPE:
 			logging.info("Handle pressure change: %s - type ID: %s", str(self.handlePressureChangeOnDevice), str(data.getTypeID()))
-			print("I AM HERE")
 			ad = ActuatorData(typeID = ConfigConst.HVAC_ACTUATOR_TYPE)
 			if data.getValue() > self.triggerHvacPressureCeiling:
 				ad.setCommand(ConfigConst.COMMAND_ON)
@@ -313,7 +284,8 @@ class DeviceDataManager(IDataMessageListener):
 			# of this exercise, the logic for filtering commands is
 			# left to ActuatorAdapterManager and its associated actuator
 			# task implementations, and not this function
-			self.handleActuatorCommandMessage(ad)
+			self.handleActuatorCommandMessage(ad)"""
+			
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
 		"""
 		Call this from handleActuatorCommandResponse(), handlesensorMessage(), and handleSystemPerformanceMessage()
