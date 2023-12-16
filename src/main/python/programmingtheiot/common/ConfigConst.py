@@ -32,6 +32,8 @@ DEFAULT_STATUS           = 0
 DEFAULT_TIMEOUT          = 5
 DEFAULT_TTL              = 300
 DEFAULT_QOS              = 0
+
+DEFAULT_DATA_PORT        = 6379
  
 # for purposes of this library, float precision is more then sufficient
 DEFAULT_LAT = DEFAULT_VAL
@@ -101,6 +103,8 @@ SEQUENCE_NUMBER_TOTAL_PROP = 'seqNoTotal'
 SEND_RESOURCE_NAME_PROP    = 'sendResourceName'
 RECEIVE_RESOURCE_NAME_PROP = 'receiveResourceName'
 IS_PING_PROP               = 'isPing'
+
+SENSOR_DATA_MSG_RESOURCE = 'SensorDataMsgRes'
  
 #####
 # Resource and Topic Names
@@ -215,7 +219,8 @@ COAP_GATEWAY_SERVICE  = COAP    + '.' + GATEWAY_SERVICE
 MQTT_GATEWAY_SERVICE  = MQTT    + '.' + GATEWAY_SERVICE
 OPCUA_GATEWAY_SERVICE = OPCUA   + '.' + GATEWAY_SERVICE
 SMTP_GATEWAY_SERVICE  = SMTP    + '.' + GATEWAY_SERVICE
- 
+DATA_GATEWAY_SERVICE = 'Data.GatewayService'
+
 CRED_SECTION = "Credentials"
  
 FROM_ADDRESS_KEY     = 'fromAddr'

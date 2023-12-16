@@ -157,6 +157,8 @@ class DataUtil():
 
         if self.encodeToUtf8:
             jsonData = json.dumps(obj, cls=JsonDataEncoder).encode('utf8')
+            
+            jsonData = jsonData.decode('utf-8')
         else:
             jsonData = json.dumps(obj, cls=JsonDataEncoder, indent=4)
 

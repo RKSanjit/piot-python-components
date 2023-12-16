@@ -53,7 +53,7 @@ class ResourceNameEnum(Enum):
 	CDA_SYSTEM_PERF_MSG_RESOURCE	  = ConfigConst.CDA_SYSTEM_PERF_MSG_RESOURCE
 	CDA_UPDATE_NOTIFICATIONS_RESOURCE = ConfigConst.CDA_UPDATE_NOTIFICATIONS_MSG_RESOURCE
 	CDA_REGISTRATION_REQUEST_RESOURCE = ConfigConst.CDA_REGISTRATION_REQUEST_RESOURCE
-
+	SENSOR_DATA = ConfigConst.SENSOR_DATA_MSG_RESOURCE
 	def getResourceNameByValue(self, val: str) -> str:
 		"""
 		Looks up the resource enum by its value.

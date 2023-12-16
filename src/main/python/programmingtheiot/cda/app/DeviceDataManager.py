@@ -23,6 +23,7 @@ from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
  
 import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.cda.connection.CoapServerAdapter import CoapServerAdapter
+from programmingtheiot.cda.connection.RedisPersistenceAdapter import RedisPersistenceAdapter
  
 from programmingtheiot.data.DataUtil import DataUtil
 from programmingtheiot.data.ActuatorData import ActuatorData
@@ -90,7 +91,11 @@ class DeviceDataManager(IDataMessageListener):
 			self.configUtil.getBoolean( \
 								section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_MQTT_CLIENT_KEY)
 		self.mqttClient = None
- 
+ 		
+ 		self.redisClient = RedisPersistenceAdapter()
+ 		
+ 		self.enableRedisStorage = True
+ 		
 		if self.enableMqttClient:
 			self.mqttClient = MqttClientConnector("test1")
 			self.mqttClient.setDataMessageListener(self)
@@ -188,6 +193,16 @@ class DeviceDataManager(IDataMessageListener):
 		else:
 			logging.warning("Incoming sensor data is invalid (null). Ignoring.")
 			return False
+		
+		# Store sensor data in Redis if enabled
+		if self.enableRedisStorage:
+			if self.redisClient.storeData(ResourceNameEnum.SENSOR_DATA, data):
+				logging.info("Sensor data stored in Redis successfully.")
+			else:
+				logging.error("Failed to store sensor data in Redis.")
+
+		return True
+	
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		"""
 		This callback method will be invoked by the system performance manager that just
@@ -220,6 +235,14 @@ class DeviceDataManager(IDataMessageListener):
 			self.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, callback = None, qos = ConfigConst.DEFAULT_QOS)
 		if self.coapServer:
 			self.coapServer.startServer()
+			
+				# Connect to Redis client if enabled
+		if self.enableRedisStorage:
+			if self.redisClient.connectClient():
+				logging.info("Connected to Redis client successfully.")
+			else:
+				logging.error("Failed to connect to Redis client.")
+
 		logging.info("Started DeviceDataManager.")
 	def stopManager(self):
 		"""
@@ -235,7 +258,16 @@ class DeviceDataManager(IDataMessageListener):
 			self.mqttClient.disconnectClient()
 		if self.coapServer:
 			self.coapServer.stopServer()
+			
+		# Disconnect from Redis client if enabled
+		if self.enableRedisStorage:
+			if self.redisClient.disconnectClient():
+				logging.info("Disconnected from Redis client successfully.")
+			else:
+				logging.error("Failed to disconnect from Redis client.")
+
 		logging.info("Stopped DeviceDataManager.")
+		
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""
 		Call this from handleIncomeMessage() to determine if there's
