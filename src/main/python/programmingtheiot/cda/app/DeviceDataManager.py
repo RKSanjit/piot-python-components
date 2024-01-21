@@ -23,6 +23,8 @@ from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
  
 import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.cda.connection.CoapServerAdapter import CoapServerAdapter
+#from programmingtheiot.connection.RedisPersistenceAdapter import RedisPersistenceAdapter
+
  
 from programmingtheiot.data.DataUtil import DataUtil
 from programmingtheiot.data.ActuatorData import ActuatorData
@@ -102,6 +104,11 @@ class DeviceDataManager(IDataMessageListener):
 			section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.ENABLE_COAP_CLIENT_KEY)
 		if self.enableCoapClient :
 			self.coapClient = CoapClientConnector(dataMsgListener = self)
+			
+		# Create a class-scoped instance of RedisPersistenceAdapter
+		#self.redisClient = RedisPersistenceAdapter()
+		#self.enableRedisStorage = False  # boolean flag to enable/disable storage to Redis
+		
 	def getLatestActuatorDataResponseFromCache(self, name: str = None) -> ActuatorData:
 		"""
 		Retrieves the named actuator data (response) item from the internal data cache.
